@@ -1,0 +1,5 @@
+# MidnightGateway configuration
+
+# A list of portals. Each portal has a name, a world, and two corner locations (pos1 and pos2).
+# The destination server is the name of the server to which the player will be sent.
+portals:

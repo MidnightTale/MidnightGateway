@@ -1,0 +1,4 @@
+name: MidnightGateway
+version: '${version}'
+main: fun.mntale.midnightgateway.MidnightGateway
+api-version: '1.21'
