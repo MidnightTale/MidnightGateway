@@ -10,7 +10,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.bukkit.util.Vector;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class PortalListener implements Listener {
+
+    private final Map<UUID, Long> cooldowns = new HashMap<>();
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -21,8 +29,13 @@ public class PortalListener implements Listener {
             return;
         }
 
+        if (cooldowns.containsKey(player.getUniqueId()) && System.currentTimeMillis() - cooldowns.get(player.getUniqueId()) < 3000) {
+            return;
+        }
+
         for (Portal portal : MidnightGateway.getInstance().getConfigManager().getPortals().values()) {
             if (isInPortal(to, portal)) {
+                cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
                 sendPlayerToServer(player, portal.destination());
                 return;
             }
@@ -51,6 +64,9 @@ public class PortalListener implements Listener {
             out.writeUTF(serverName);
             player.sendPluginMessage(MidnightGateway.getInstance(), "BungeeCord", b.toByteArray());
         } catch (IOException e) {
+            player.sendMessage("Error while connecting to the server.");
+            Vector knockback = player.getLocation().getDirection().multiply(-1).setY(0.5);
+            player.setVelocity(knockback);
             e.printStackTrace();
         }
     }

@@ -14,6 +14,7 @@ public final class MidnightGateway extends JavaPlugin {
         configManager = new ConfigurationManager();
         configManager.load();
 
+        getServer().getPluginManager().registerEvents(new PortalListener(), this);
         BasicCommand PortalCommand = new PortalCommand();
         registerCommand("mgw", PortalCommand);
 
